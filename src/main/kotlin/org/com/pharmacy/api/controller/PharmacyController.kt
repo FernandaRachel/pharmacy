@@ -14,15 +14,14 @@ open class PharmacyController(private val pharmacyService: PharmacyService) {
 
     @GetMapping("/pharmacy")
     fun getPharmacy(@RequestParam(value = "id") id: Long): ResponseEntity<PharmacyResponse> {
-        // id non null id validation
-        val foundPharmacy = pharmacyService.findPharmacyById(id)
-        return ResponseEntity.ok(PharmacyResponse(1L, "Drogasil"))
+        // TODO: id non null id validation
+        val foundPharmacy = pharmacyService.findPharmacyById(id) ?: return ResponseEntity.notFound().build()
+        return ResponseEntity.ok(foundPharmacy.toResponse())
     }
 
     @PostMapping("/pharmacy")
     fun postPharmacy(@RequestBody @Valid request: PharmacyRequest): ResponseEntity<PharmacyResponse> {
-        // TODO: pass request
-        val addedPharmacy = pharmacyService.addPharmacy()
+        val addedPharmacy = pharmacyService.addPharmacy(request.toPharmacy())
         return ResponseEntity.ok(addedPharmacy.toResponse())
     }
 }

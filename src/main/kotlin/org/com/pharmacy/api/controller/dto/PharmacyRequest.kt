@@ -9,7 +9,13 @@ data class PharmacyRequest(
     val country: String,
     val city: String
 ) {
-    fun toResponse(pharmacy: Pharmacy): PharmacyResponse {
-        return PharmacyResponse(id = pharmacy.id, name = pharmacy.name)
+    fun toPharmacy(): Pharmacy {
+        return Pharmacy(
+            id = null,
+            name = this.name,
+            address = this.address,
+            country = this.country,
+            city = this.city,
+        )
     }
 }
