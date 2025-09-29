@@ -1,41 +1,55 @@
-package org.com.org.com.pharmacy.infrastructure.repository.entities
+package org.com.pharmacy.infrastructure.repository.entities
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Table
+import org.com.org.com.pharmacy.domain.model.Pharmacy
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.io.Serializable
 import java.time.Instant
-
+/**
+ * Why data class is problematic with JPA ?
+ * Hibernate proxies
+ * - Hibernate often creates proxies (subclasses) of your entity for lazy loading.
+ * - data class makes your class final by default, preventing subclassing. (Yes, you can use the Kotlin all-open compiler plugin, but it’s an extra dependency.)
+ * */
 @Entity
-class PharmacyEntity : Serializable {
+@Table(name = "pharmacies")
+class PharmacyEntity(
 
     @Id
-    @GeneratedValue
-    private val id: Long? = null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
+    @Column(nullable = false)
+    var name: String = "",
+
+    @Column(nullable = false)
+    var address: String = "",
+
+    @Column(nullable = false)
+    var country: String = "",
+
+    @Column(nullable = false)
+    var city: String = "",
 
     @CreationTimestamp
-    var createdTime: Instant? = null
+    @Column(updatable = false)
+    var createdTime: Instant? = null,
 
     @UpdateTimestamp
     var updatedTime: Instant? = null
-
-    var name: String? = null
-    var address: String? = null
-    var country: String? = null
-    var city: String? = null
+)
 
 
-    protected constructor() {
-        // no-args constructor required by JPA spec
-        // this one is protected since it should not be used directly
-    }
+fun PharmacyEntity.toPharmacy(): Pharmacy {
+    return Pharmacy(id = id, name = name, address = address, country = country, city = city)
+}
 
-//    constructor(name: String?, state: String?) {
-//        this.name = name
-//        this.state = state
-//    }
-
+fun Pharmacy.toEntity(): PharmacyEntity {
+    return PharmacyEntity(name = name, address = address, country = country, city = city)
 }

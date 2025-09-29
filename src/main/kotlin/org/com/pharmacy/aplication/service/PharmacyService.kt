@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class PharmacyService(private val repository: PharmacyRepository) {
-    // TODO: add pharmacy input
     fun addPharmacy(request: Pharmacy): Pharmacy {
         return repository.addPharmacy(request)
     }

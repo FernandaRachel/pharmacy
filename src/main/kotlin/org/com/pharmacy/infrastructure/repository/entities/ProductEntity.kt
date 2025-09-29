@@ -3,13 +3,15 @@ package org.com.pharmacy.infrastructure.repository.entities
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import org.springframework.data.annotation.Id
 import java.util.Date
 
 @Entity
-data class ProductEntity(
+@Table(name = "products")
+class ProductsEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long,

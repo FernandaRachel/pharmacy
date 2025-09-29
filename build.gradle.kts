@@ -20,7 +20,6 @@ kotlin {
 
 // this create the 'run' in application
 application { mainClass.set("org.com.MainKt") }
-//application { mainClass.set("org.com.pharmacy.api.controller.PharmacyControllerKt") }
 
 repositories {
     mavenCentral()
@@ -29,13 +28,13 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
-    implementation("org.springframework.boot:spring-boot-starter-data-jdbc:$springBootVersion")
+    // web
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
 
     // DB
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
-//    implementation("org.hsqldb:hsqldb:2.7.2")
+    // Hibernate + JPA
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion") // depends on jakarta
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin") // Jackson extensions for Kotlin for working with JSON
     implementation("org.jetbrains.kotlin:kotlin-reflect") // Kotlin reflection library, required for working with Spring
@@ -69,7 +68,6 @@ tasks.register<Exec>("dockerUp") {
 tasks.named<BootRun>("bootRun") {
     dependsOn("dockerUp")
     mainClass.set("org.com.MainKt")
-//    mainClass.set("org.com.pharmacy.api.controller.PharmacyControllerKt")
 }
 
 tasks.test {
