@@ -6,13 +6,16 @@ import org.com.org.com.pharmacy.aplication.service.PharmacyService
 import org.com.pharmacy.api.controller.dto.PharmacyResponse
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
-@SpringBootApplication
+//@SpringBootApplication
 @RestController
 open class PharmacyController(private val pharmacyService: PharmacyService) {
 
+    // TODO: add authentication
     @GetMapping("/pharmacy")
+    @PreAuthorize("hasRole('USER')")
     fun getPharmacy(@RequestParam(value = "id") id: Long): ResponseEntity<PharmacyResponse> {
         // TODO: id non null id validation
         val foundPharmacy = pharmacyService.findPharmacyById(id) ?: return ResponseEntity.notFound().build()

@@ -1,7 +1,6 @@
 package org.com.org.com.pharmacy.aplication.service
 
-import org.com.org.com.pharmacy.api.controller.model.PharmacyRequest
-import org.com.pharmacy.api.domain.model.Pharmacy
+import org.com.org.com.pharmacy.domain.model.Pharmacy
 import org.com.pharmacy.domain.repository.PharmacyRepository
 import org.springframework.stereotype.Component
 

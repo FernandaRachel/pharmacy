@@ -5,26 +5,22 @@ version = "1.0-SNAPSHOT"
 val springBootVersion = "3.2.5"
 
 plugins {
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm") version "2.0.21"
     id("application")
-    id("org.springframework.boot") version "3.4.5"
+    id("org.springframework.boot") version "3.2.5"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.0.21" // so configuration class are automatically open
+
     `kotlin-dsl`
 }
 
-// this create the 'run' in application
-application { mainClass.set("org.com.pharmacy.MainKt") }
-//application { mainClass.set("org.com.pharmacy.api.controller.PharmacyControllerKt") }
-//application { mainClass.set("org.com.MainKt") }
-
-tasks.named<BootRun>("bootRun") {
-    mainClass.set("org.com.MainKt")
-//    mainClass.set("org.com.pharmacy.api.controller.PharmacyControllerKt")
+kotlin {
+    jvmToolchain(21)
 }
 
-//springBoot {
-//    mainClass.set("org.com.Main")
-//}
+// this create the 'run' in application
+application { mainClass.set("org.com.MainKt") }
+//application { mainClass.set("org.com.pharmacy.api.controller.PharmacyControllerKt") }
 
 repositories {
     mavenCentral()
@@ -34,38 +30,59 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
 
     // DB
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
-    implementation("org.hsqldb:hsqldb:2.7.2")
+//    implementation("org.hsqldb:hsqldb:2.7.2")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin") // Jackson extensions for Kotlin for working with JSON
     implementation("org.jetbrains.kotlin:kotlin-reflect") // Kotlin reflection library, required for working with Spring
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
 
-    runtimeOnly("com.h2database:h2")
+    // HTTP
+    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+
+    // Log
+    implementation("org.slf4j:slf4j-simple:2.0.9")
+
+//    runtimeOnly("com.h2database:h2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly("com.mysql:mysql-connector-j:8.3.0") // ✅ MySQL driver
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-dependencyManagement {
-    dependencies {
-        dependencySet("org.slf4j:1.7.7") {
-            entry("slf4j-api")
-            entry("slf4j-simple")
-        }
-    }
+configurations.all {
+    exclude(group = "ch.qos.logback", module = "logback-classic")
 }
 
+tasks.register<Exec>("dockerUp") {
+    commandLine("/opt/homebrew/bin/docker", "compose", "-f",
+        rootProject.file("config/docker/docker-compose.yml").absolutePath,
+        "up", "-d")
+}
 
+tasks.named<BootRun>("bootRun") {
+    dependsOn("dockerUp")
+    mainClass.set("org.com.MainKt")
+//    mainClass.set("org.com.pharmacy.api.controller.PharmacyControllerKt")
+}
 
 tasks.test {
     useJUnitPlatform()
 }
-kotlin {
-    jvmToolchain(21)
-}
+
+
+
+//dependencyManagement {
+//    dependencies {
+//        dependencySet("org.slf4j:1.7.7") {
+//            entry("slf4j-api")
+//            entry("slf4j-simple")
+//        }
+//    }
+//}

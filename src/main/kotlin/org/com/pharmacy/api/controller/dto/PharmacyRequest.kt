@@ -1,7 +1,6 @@
 package org.com.org.com.pharmacy.api.controller.model
 
-import org.com.pharmacy.api.controller.dto.PharmacyResponse
-import org.com.pharmacy.api.domain.model.Pharmacy
+import org.com.org.com.pharmacy.domain.model.Pharmacy
 
 data class PharmacyRequest(
     val name: String,

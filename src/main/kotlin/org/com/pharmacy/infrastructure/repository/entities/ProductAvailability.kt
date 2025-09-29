@@ -1,4 +1,4 @@
-package org.com.org.com.pharmacy.infrastructure.repository.entities
+package org.com.pharmacy.infrastructure.repository.entities
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -10,7 +10,9 @@ import java.util.Date
 
 @Entity
 data class ProductAvailability(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long,
     @CreationTimestamp
     val createdAt: Date,
     @UpdateTimestamp

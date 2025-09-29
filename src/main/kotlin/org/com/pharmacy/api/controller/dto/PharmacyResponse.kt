@@ -1,6 +1,6 @@
 package org.com.pharmacy.api.controller.dto
 
-import org.com.pharmacy.api.domain.model.Pharmacy
+import org.com.org.com.pharmacy.domain.model.Pharmacy
 
 data class PharmacyResponse(
     val id: Long,
